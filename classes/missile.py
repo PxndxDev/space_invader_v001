@@ -14,7 +14,5 @@ class Missile(pygame.sprite.Sprite):
         self.rect.y = self.spaceship.rect.y - self.spaceship.rect.height
         self.rect.x = self.spaceship.rect.x + (self.spaceship.rect.width / 2) - (self.image.get_width() / 2)
 
-        self.damages = 10
-
     def move(self):
         self.rect.y -= 10

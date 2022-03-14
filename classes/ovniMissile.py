@@ -14,7 +14,5 @@ class OvniMissile(pygame.sprite.Sprite):
         self.rect.y = self.ovni.rect.y + self.ovni.rect.height
         self.rect.x = self.ovni.rect.x + (self.ovni.rect.width / 2) - (self.image.get_width() / 2)
 
-        self.damages = 50
-
     def move(self):
         self.rect.y += 2

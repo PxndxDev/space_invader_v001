@@ -31,13 +31,6 @@ class Window():
         # affichage du joueur
         self.screen.blit(self.player.image, self.player.rect)
 
-        # boucle des missiles nucléaires sur le terrain
-        for nuke in self.nuclearEvent:
-            nuke.move()
-            if nuke.rect.y <= 0 - nuke.rect.height:
-                self.nuclearEvent.remove(nuke)
-            self.screen.blit(nuke.image, nuke.rect)
-
         # boucle des missiles sur le terrain
         for mis in self.missileEvent:
             mis.move()
@@ -45,22 +38,40 @@ class Window():
                 self.missileEvent.remove(mis)
             self.screen.blit(mis.image, mis.rect)
 
+            if fct.collides(mis, self.allOvnis, False):
+                self.missileEvent.remove(mis)
+
+        # boucle des missiles nucléaires sur le terrain
+        for nuke in self.nuclearEvent:
+            nuke.move()
+            if nuke.rect.y <= 0 - nuke.rect.height:
+                self.nuclearEvent.remove(nuke)
+            self.screen.blit(nuke.image, nuke.rect)
+
         # boucle des ovnis sur le terrain
         for ovni in self.allOvnis:
-            if ovni.yLimit == ovni.rect.y:
-                ovni.shoot()
+            if ovni.life <= 0:
+                self.allOvnis.remove(ovni)
             else:
-                ovni.move()
-                
-                if ovni.rect.y >= self.screen.get_width():
-                    self.allOvnis.remove(ovni)
-            self.screen.blit(ovni.image, ovni.rect)
+                if ovni.yLimit == ovni.rect.y:
+                    ovni.shoot()
+                else:
+                    ovni.move()
+                    
+                    if ovni.rect.y >= self.screen.get_width():
+                        self.allOvnis.remove(ovni)
 
-            # boucle pour les missiles d'ovni
-            for om in ovni.allMissiles:
-                om.move()
+                # boucle pour les missiles d'ovni
+                for om in ovni.allMissiles:
+                    om.move()
 
-                self.screen.blit(om.image, om.rect)
+                    self.screen.blit(om.image, om.rect)
+
+                # ----- COLLISIONS AVEC L'OVNI -----
+                my_sprite = ovni
+                my_bullet = Bullet(by, by)
+
+                self.screen.blit(ovni.image, ovni.rect)
 
         # générateur d'ovnis
         if time.time() - self.last_ovni >= 4 and self.allOvnis.__len__() < 6:
